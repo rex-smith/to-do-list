@@ -1,5 +1,5 @@
-export default function Project() {
-  let projectFactory = (title, toDoArray) {
+export default function projectBuilder() {
+  let projectFactory = (title, toDoArray) => {
 
     const getTitle = () => { title };
     const setTitle = (newTitle) => { title = newTitle }; 

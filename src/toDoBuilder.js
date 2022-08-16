@@ -1,4 +1,4 @@
-export default function toDo() {
+export default function toDoBuilder() {
   // Factory
   let toDoFactory = (title, dueDate, notes, priority, complete) => {
 
