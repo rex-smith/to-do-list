@@ -1,5 +1,5 @@
-import projectHandler from './projectBuilder.js'
-import todoHandler from './toDoBuilder.js'
+import projectBuilder from './projectBuilder.js'
+import toDoBuilder from './toDoBuilder.js'
 
 export default function storageHandler() {
   // Check if storage available
@@ -35,9 +35,9 @@ export default function storageHandler() {
         localStorage.clear();
       }
       // For each project to be stored as separate
-      for (let i = 0; i < projectArray.length; i++) {
-        localStorage.setItem(`project-${i}`, JSON.stringify(projectArray[i]));
-      }
+      // for (let i = 0; i < projectArray.length; i++) {
+      //   localStorage.setItem(`project-${i}`, JSON.stringify(projectArray[i]));
+      // }
       // OR FOR FULL ARRAY SERIALIZED
       localStorage.setItem('project-array', JSON.stringify(projectArray));
     } else {
@@ -50,10 +50,10 @@ export default function storageHandler() {
       let projectArray = [];
       if (localStorage.length > 0) {
         // To retrieve if each project stored separately
-        for (let i = 0; i < localStorage.length; i++) {
-          let savedProject = JSON.parse(localStorage.getItem(localStorage.key(i)));
-          projectArray.push(savedProject);
-        }
+        // for (let i = 0; i < localStorage.length; i++) {
+        //   let savedProject = JSON.parse(localStorage.getItem(localStorage.key(i)));
+        //   projectArray.push(savedProject);
+        // }
         // OR FOR FULL ARRAY FROM SERIALIZED VERSION
         projectArray = JSON.parse(localStorage.getItem('project-array'));
         return projectArray;
@@ -66,7 +66,7 @@ export default function storageHandler() {
   }
 
   function createRealItem(item) {
-    let realItem = toDoFactory(item.title, item.dueDate, item.notes, item.priority, item.complete);
+    let realItem = toDoBuilder.toDoFactory(item.title, item.dueDate, item.notes, item.priority, item.complete);
     return realItem;
   }
 
@@ -77,7 +77,7 @@ export default function storageHandler() {
       for (item in project) {
         realItemArray.push(createRealItem(item));
       }
-      let realProject = projectFactory(project.title, realItemArray);
+      let realProject = projectBuilder.projectFactory(project.title, realItemArray);
       realProjectArray.push(realProject);
     }
     return realProjectArray;
