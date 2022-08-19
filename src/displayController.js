@@ -1,5 +1,5 @@
 import { format, compareAsc } from 'date-fns';
-import toDoFactory from './toDoBuilder.js';
+import itemFactory from './itemBuilder.js';
 import projectFactory from './projectBuilder.js';
 
 // Probably need to put these into each function
@@ -64,10 +64,10 @@ function buildProject(project) {
   // Get To Dos is returning something undefined -- Getters must be messed up
 
   console.log(project);
-  let toDoItemArray = project.getToDos();
-  console.log(toDoItemArray);
-  for (let i = 0; i < toDoItemArray.length; i++) {
-    let newItem = buildItem(toDoItemArray[i]);
+  let itemArray = project.getItems();
+  console.log(itemArray);
+  for (let i = 0; i < itemArray.length; i++) {
+    let newItem = buildItem(itemArray[i]);
     newProjectList.appendChild(newItem);
   }
   newProject.appendChild(newProjectList);

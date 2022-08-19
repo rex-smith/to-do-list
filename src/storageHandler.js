@@ -1,5 +1,5 @@
 import projectFactory from './projectBuilder.js'
-import toDoFactory from './toDoBuilder.js'
+import itemFactory from './itemBuilder.js'
 
 export function storageAvailable(type) {
   let storage;
@@ -63,7 +63,7 @@ export function retrieveList() {
 }
 
 export function createRealItem(item) {
-  let realItem = toDoFactory(item.title, new Date(item.dueDate), item.notes, item.priority, item.complete);
+  let realItem = itemFactory(item.title, new Date(item.dueDate), item.notes, item.priority, item.complete);
   return realItem;
 }
 
@@ -72,9 +72,9 @@ export function createRealProjects(projectArray) {
   for (let i = 0; i < projectArray.length; i++) {
     let realItemArray = [];
     let project = projectArray[i];
-    let toDoArray = project.toDoArray;
-    for (let j = 0; j < toDoArray.length; j++) {
-      realItemArray.push(createRealItem(toDoArray[j]));
+    let itemArray = project.itemArray;
+    for (let j = 0; j < itemArray.length; j++) {
+      realItemArray.push(createRealItem(itemArray[j]));
     }
     let realProject = projectFactory(project.title, realItemArray);
     realProjectArray.push(realProject);

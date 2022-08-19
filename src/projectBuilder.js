@@ -1,25 +1,25 @@
-export default function projectFactory(title, toDoArray) {
+export default function projectFactory(title, itemArray) {
 
-  const getTitle = () => title;
+  const getTitle = () => { return title };
   const setTitle = (newTitle) => { title = newTitle }; 
-  const getToDos = () => toDoArray;
-  const addToDo = (toDoItem) => {
-    toDoArray.push(toDoItem);
+  const getItems = () => { return itemArray };
+  const addItem = (item) => {
+    itemArray.push(item);
   }
-  const removeToDo = (toDoItem) => {
-    for (let i = 0; i < toDoArray.length; i++) {
-      if (toDoArray[i].getTitle === toDoItem.getTitle) {
-        toDoArray.splice(i, 1)
+  const removeItem = (item) => {
+    for (let i = 0; i < itemArray.length; i++) {
+      if (itemArray[i].getTitle() === item.getTitle()) {
+        itemArray.splice(i, 1)
       }
     }
   }
   return {
     title,
-    toDoArray,
+    itemArray,
     getTitle,
     setTitle,
-    getToDos,
-    addToDo,
-    removeToDo
+    getItems,
+    addItem,
+    removeItem
   }
 }

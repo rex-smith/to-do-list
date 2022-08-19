@@ -1,16 +1,14 @@
 export default function toDoFactory(title, dueDate, notes, priority, complete) {
-  // Factory
-  // Getters and Setters for all properties 
 
-  const getTitle = () => title ;
+  const getTitle = () => { return title } ;
   const setTitle = (newTitle) => { title = newTitle };
-  const getDueDate = () => dueDate;
+  const getDueDate = () => { return dueDate };
   const setDueDate = (newDueDate) => { dueDate = newDueDate };
-  const getNotes = () => notes;
+  const getNotes = () => { return notes };
   const setNotes = (newNotes) => { notes = newNotes };
-  const getPriority = () => priority;
+  const getPriority = () => { return priority };
   const setPriority = (newPriority) => { priority = newPriority };
-  const getComplete = () => complete;
+  const getComplete = () => { return complete };
   const setComplete = (newComplete) => { complete = newComplete };
 
   return {
