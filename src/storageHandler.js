@@ -31,11 +31,6 @@ export function saveList(projectArray) {
     if (localStorage.length > 0) {
       localStorage.clear();
     }
-    // For each project to be stored as separate
-    // for (let i = 0; i < projectArray.length; i++) {
-    //   localStorage.setItem(`project-${i}`, JSON.stringify(projectArray[i]));
-    // }
-    // OR FOR FULL ARRAY SERIALIZED
     localStorage.setItem('project-array', JSON.stringify(projectArray));
   } else {
     console.log('No storage set up!');
@@ -46,12 +41,6 @@ export function retrieveList() {
   if (storageAvailable('localStorage')) {
     let projectArray = [];
     if (localStorage.length > 0) {
-      // To retrieve if each project stored separately
-      // for (let i = 0; i < localStorage.length; i++) {
-      //   let savedProject = JSON.parse(localStorage.getItem(localStorage.key(i)));
-      //   projectArray.push(savedProject);
-      // }
-      // OR FOR FULL ARRAY FROM SERIALIZED VERSION
       projectArray = JSON.parse(localStorage.getItem('project-array'));
       return projectArray;
     } else {

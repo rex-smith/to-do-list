@@ -94,6 +94,22 @@ nav {
 	grid-template-columns: 1fr 5fr;
 }
 
+#side-main-title {
+	font-size: 1.7rem;
+	font-weight: 600;
+	margin: 5px;
+	color: rgb(41, 41, 41);
+	padding: 5px 0px;
+	border-bottom: 2px solid black;
+}
+
+.side-project-title {
+	font-size: 1.4rem;
+	font-weight: 500;
+	margin: 5px;
+	color: rgb(60, 60, 60);
+}
+
 aside {
 	min-width: 200px;
 	height: 100%;
@@ -104,30 +120,85 @@ aside {
 	justify-content: flex-start;
 }
 
+.side-add-new {
+	color: rgb(48, 177, 228);
+	font-weight: 700;
+	font-size: 1.4rem;
+	margin: 5px;
+}
+
 /* May need to input the sidebar class here for styling */
 
 .list-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	border: 1px black solid;
 }
 
 #current-project {
 	display: flex;
 	flex-direction: column;
-	border: 1px black solid;
+	border: 1px gray solid;
 }
 
 #current-item {
 	display: flex;
 	flex-direction: column;
-	border: 1px black solid;
+	border: 1px gray solid;
 }
 
 .to-do-container {
 	display: flex;
 	flex-direction: row;
-	border: 1px black solid;
+	margin: 10px 20px;
+	padding: 5px;
+}
+
+.project-title {
+	font-size: 1.5rem;
+	font-weight: 700;
+	margin: 10px;
+}
+
+.due-date {
+	margin: 0px 20px;
+}
+
+.high-priority {
+	box-shadow: 0px 0px 2px red;
+}
+
+.medium-priority {
+	box-shadow: 0px 0px 2px rgb(255, 196, 0);
+}
+
+.low-priority {
+	box-shadow: 0px 0px 2px gray;
+}
+
+.item-extras {
+	flex-grow: 1;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.priority-flag {
+	margin: 0px 5px;
+}
+
+.red-flag {
+	color: rgb(187, 2, 2);
+}
+
+.orange-flag {
+	color: rgb(255, 196, 0);
+}
+
+.complete-box {
+	margin: 0px 5px;
+}
+
+.complete {
+	color: lightgray;
 }
 
 footer {

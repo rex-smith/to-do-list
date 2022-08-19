@@ -1,7 +1,7 @@
 import itemFactory from './itemBuilder.js';
 import projectFactory from './projectBuilder.js';
 import { saveList, retrieveList, createRealProjects } from './storageHandler.js';
-import { addProjectToSidebar, showProject } from './displayController.js';
+import { activateProject, addProjectToSidebar, addNewProjectLink } from './displayController.js';
 import { format, compareAsc } from 'date-fns';
 import './style.css';
 
@@ -15,25 +15,27 @@ let item2 = itemFactory('Water the plants', new Date(2022, 10, 29, 14),
 let item3 = itemFactory('Homework', new Date(2022, 11, 10, 10),
                         'All homework assignments are due by Monday', 2, false);
 let item4 = itemFactory('Wash the dishes', new Date(2022, 12, 6, 16),
-                        'Wash the dishes before mom and dad come home', 1, false);                        
+                        'Wash the dishes before mom and dad come home', 1, true);                        
 let itemArray = [item1, item2, item3, item4];
 let seedProject = projectFactory('Main List', itemArray);
-let seedProjectArray = [seedProject];
+let seedProjectArray = [seedProject, seedProject];
 
 // Save seed array to localStorage
 saveList(seedProjectArray);
 
 // Retrieve the array from storage
 let projectArray = retrieveList();
+
 projectArray = createRealProjects(projectArray);
 
 // Show all projects
 
 for (let i = 0; i < projectArray.length; i++) {
   addProjectToSidebar(projectArray[i]);
-  showProject(projectArray[i]);
 }
 
+activateProject(projectArray[0]);
+addNewProjectLink();
 
 
 
