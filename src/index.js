@@ -8,8 +8,7 @@ import './style.css';
 console.log('Index.js file loaded.');
 
 // Create initial seed 'database'
-
-let item1 = toDoFactory('Take out trash', new Date(2022, 10, 27, 16),
+let item1 = toDoFactory('Take out trash', new Date(2019, 10, 27, 16),
                         'The trash needs to be taken out by Friday', 1, false);
 let item2 = toDoFactory('Water the plants', new Date(2022, 10, 29, 14),
                         'The plants need water before they die', 1, false);
@@ -25,7 +24,7 @@ let seedProjectArray = [seedProject];
 saveList(seedProjectArray);
 
 // Retrieve the array from storage
-let projectArray = retrievelist();
+let projectArray = retrieveList();
 projectArray = createRealProjects(projectArray);
 
 // Show all projects

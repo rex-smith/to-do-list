@@ -1,8 +1,8 @@
 export default function projectFactory(title, toDoArray) {
 
-  const getTitle = () => { title };
+  const getTitle = () => title;
   const setTitle = (newTitle) => { title = newTitle }; 
-  const getToDos = () => { toDoArray };
+  const getToDos = () => toDoArray;
   const addToDo = (toDoItem) => {
     toDoArray.push(toDoItem);
   }

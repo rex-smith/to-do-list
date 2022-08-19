@@ -63,7 +63,7 @@ export function retrieveList() {
 }
 
 export function createRealItem(item) {
-  let realItem = toDoFactory(item.title, item.dueDate, item.notes, item.priority, item.complete);
+  let realItem = toDoFactory(item.title, new Date(item.dueDate), item.notes, item.priority, item.complete);
   return realItem;
 }
 
@@ -72,11 +72,11 @@ export function createRealProjects(projectArray) {
   for (let i = 0; i < projectArray.length; i++) {
     let realItemArray = [];
     let project = projectArray[i];
-    let toDoArray = project.getToDos();
+    let toDoArray = project.toDoArray;
     for (let j = 0; j < toDoArray.length; j++) {
       realItemArray.push(createRealItem(toDoArray[j]));
     }
-    let realProject = projectFactory(project.getTitle(), realItemArray);
+    let realProject = projectFactory(project.title, realItemArray);
     realProjectArray.push(realProject);
   }
   return realProjectArray;

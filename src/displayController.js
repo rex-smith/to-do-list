@@ -1,4 +1,6 @@
 import { format, compareAsc } from 'date-fns';
+import toDoFactory from './toDoBuilder.js';
+import projectFactory from './projectBuilder.js';
 
 // Probably need to put these into each function
 let currentProject = document.getElementById('current-project');
@@ -25,7 +27,7 @@ function buildItem(item) {
   // Form or button to select box for new item complete
   // This should just change whether there is an x and strikeout with gray font or [] 
   let newItemComplete = document.createElement('div');
-  if (newItem.getComplete() === true) {
+  if (item.getComplete() === true) {
     newItem.classList.add('complete');
   } else {
     newItem.classList.add('incomplete');
@@ -59,7 +61,11 @@ function buildProject(project) {
   newProject.appendChild(newProjectTitle);
   newProjectTitle.innerText = `${project.getTitle}`;
   let newProjectList = document.createElement('div');
+  // Get To Dos is returning something undefined -- Getters must be messed up
+
+  console.log(project);
   let toDoItemArray = project.getToDos();
+  console.log(toDoItemArray);
   for (let i = 0; i < toDoItemArray.length; i++) {
     let newItem = buildItem(toDoItemArray[i]);
     newProjectList.appendChild(newItem);
