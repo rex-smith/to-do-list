@@ -1,0 +1,76 @@
+#current-project {
+	display: flex;
+	flex-direction: column;
+	border: 1px rgb(238, 238, 238) solid;
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px rgb(238, 238, 238);
+	padding: 5px;
+	margin: 5px;
+}
+
+.to-do-container {
+	display: flex;
+	flex-direction: row;
+	margin: 10px 20px;
+	padding: 5px;
+}
+
+.item-detail-container {
+	display: flex;
+	flex-direction: column;
+	margin: 10px 20px;
+	padding: 5px;
+}
+
+.due-date {
+	margin: 0px 20px;
+}
+
+.high-priority {
+	box-shadow: 0px 0px 2px red;
+}
+
+.medium-priority {
+	box-shadow: 0px 0px 2px rgb(255, 196, 0);
+}
+
+.low-priority {
+	box-shadow: 0px 0px 2px gray;
+}
+
+.item-extras {
+	flex-grow: 1;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.priority-flag {
+	margin: 0px 5px;
+}
+
+.red-flag {
+	color: rgb(187, 2, 2);
+}
+
+.orange-flag {
+	color: rgb(255, 196, 0);
+}
+
+.transparent-flag {
+  color: transparent;
+}
+
+.complete-box {
+	margin: 0px 5px;
+}
+
+.complete {
+	color: lightgray;
+}
+
+.add-item-button {
+  color: rgb(48, 177, 228);
+  cursor: pointer;
+  margin: 10px 20px;
+	padding: 5px;
+}

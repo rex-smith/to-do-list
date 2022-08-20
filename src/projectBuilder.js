@@ -1,5 +1,5 @@
 export default function projectFactory(title, itemArray) {
-
+  
   const getTitle = () => { return title };
   const setTitle = (newTitle) => { title = newTitle }; 
   const getItems = () => { return itemArray };

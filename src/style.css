@@ -89,118 +89,59 @@ nav {
 .main-container {
 	width: 1000px;
 	margin: 0 auto;
-	height: calc(100vh - 80px);
+	height: calc(100vh - 120px);
 	display: grid;
 	grid-template-columns: 1fr 5fr;
 }
-
-#side-main-title {
-	font-size: 1.7rem;
-	font-weight: 600;
-	margin: 5px;
-	color: rgb(41, 41, 41);
-	padding: 5px 0px;
-	border-bottom: 2px solid black;
-}
-
-.side-project-title {
-	font-size: 1.4rem;
-	font-weight: 500;
-	margin: 5px;
-	color: rgb(60, 60, 60);
-}
-
-aside {
-	min-width: 200px;
-	height: 100%;
-	background-color: rgb(218, 218, 218);
-	color: white;
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-}
-
-.side-add-new {
-	color: rgb(48, 177, 228);
-	font-weight: 700;
-	font-size: 1.4rem;
-	margin: 5px;
-}
-
-/* May need to input the sidebar class here for styling */
 
 .list-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 }
 
-#current-project {
-	display: flex;
-	flex-direction: column;
-	border: 1px gray solid;
-}
-
-#current-item {
-	display: flex;
-	flex-direction: column;
-	border: 1px gray solid;
-}
-
-.to-do-container {
-	display: flex;
-	flex-direction: row;
-	margin: 10px 20px;
-	padding: 5px;
-}
-
-.project-title {
+h2 {
 	font-size: 1.5rem;
 	font-weight: 700;
 	margin: 10px;
 }
 
-.due-date {
-	margin: 0px 20px;
+button {
+	background-color: rgb(48, 177, 228);
+	color: white;
+	border: none;
+	border-radius: 5px;
+	padding: 7px;
+	font-size: 1rem;
+	font-weight: 400;
 }
 
-.high-priority {
-	box-shadow: 0px 0px 2px red;
+.button-primary {
+	background-color: rgb(48, 177, 228);
+	color: white;
 }
 
-.medium-priority {
-	box-shadow: 0px 0px 2px rgb(255, 196, 0);
+.button-secondary {
+	background-color: rgb(218, 218, 218);
+	color: rgb(48, 177, 228);
 }
 
-.low-priority {
-	box-shadow: 0px 0px 2px gray;
+.button-outline {
+	background-color: white;
+	color: rgb(48, 177, 228);
+	border: 1px rgb(48, 177, 228) solid;
 }
 
-.item-extras {
-	flex-grow: 1;
-	display: flex;
-	justify-content: flex-end;
-}
-
-.priority-flag {
-	margin: 0px 5px;
-}
-
-.red-flag {
-	color: rgb(187, 2, 2);
-}
-
-.orange-flag {
-	color: rgb(255, 196, 0);
-}
-
-.complete-box {
-	margin: 0px 5px;
-}
-
-.complete {
-	color: lightgray;
+.button-delete {
+	background-color: rgb(187, 2, 2);
+	color: white;
 }
 
 footer {
-
+	background-color: rgb(48, 177, 228);
+	height: 40px;
+	color: white;
+	font-size: 1rem;
+	font-weight: 400;
+	text-align: center;
+	padding-top: 15px;
 }
