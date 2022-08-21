@@ -1,4 +1,4 @@
-export default function toDoFactory(title, dueDate, notes, priority, complete) {
+export default function toDoFactory(title='', dueDate=(new Date()), notes='', priority=3, complete=false, projectId) {
 
   const getTitle = () => { return title } ;
   const setTitle = (newTitle) => { title = newTitle };
@@ -10,6 +10,8 @@ export default function toDoFactory(title, dueDate, notes, priority, complete) {
   const setPriority = (newPriority) => { priority = newPriority };
   const getComplete = () => { return complete };
   const setComplete = (newComplete) => { complete = newComplete };
+  const getProjectId = () => { return projectId };
+  const setProjectId = (newProjectId) => { projectId = newProjectId };
 
   return {
     title,
@@ -26,6 +28,8 @@ export default function toDoFactory(title, dueDate, notes, priority, complete) {
     getPriority,
     setPriority,
     getComplete,
-    setComplete
+    setComplete,
+    getProjectId,
+    setProjectId
   }
 }

@@ -41,9 +41,28 @@ aside {
 	justify-content: flex-start;
 }
 
-.side-add-new {
+#side-add-new {
 	color: rgb(48, 177, 228);
 	font-weight: 700;
 	font-size: 1.4rem;
 	margin: 5px;
+  cursor: pointer;
+}
+
+#new-project-form {
+  font-size: 1.4rem;
+	font-weight: 500;
+	margin: 5px;
+  border-radius: 5px;
+	color: rgb(60, 60, 60);
+  display: flex;
+  flex-direction: column;
+}
+
+#new-project-form input {
+  border: 1px solid rgb(238, 238, 238);
+  border-radius: 5px;
+  font-size: 1.2rem;
+  padding: 5px;
+  flex-grow: 1;
 }

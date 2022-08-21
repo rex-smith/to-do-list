@@ -1,5 +1,9 @@
+let projectCounter = 0;
+
 export default function projectFactory(title, itemArray) {
-  
+  projectCounter++;
+  const pid = projectCounter;
+
   const getTitle = () => { return title };
   const setTitle = (newTitle) => { title = newTitle }; 
   const getItems = () => { return itemArray };
@@ -13,13 +17,19 @@ export default function projectFactory(title, itemArray) {
       }
     }
   }
+  const getId = () => { return pid };
+  const setId = (newPid) => { pid = newPid};
+
   return {
+    pid,
     title,
     itemArray,
     getTitle,
     setTitle,
     getItems,
     addItem,
-    removeItem
+    removeItem,
+    getId,
+    setId
   }
 }
