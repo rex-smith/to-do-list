@@ -26,6 +26,7 @@ label {
   margin: 5px;
   padding: 5px;
   font-weight: 700;
+  width: 100px;
 }
 
 textarea {
@@ -52,6 +53,19 @@ textarea {
 
 .field {
 margin: 5px 0px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: row;
+}
+
+
+
+.button-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
 
 

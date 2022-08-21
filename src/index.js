@@ -1,17 +1,15 @@
 import projectFactory from './projectBuilder.js';
 import { saveList, retrieveList, createRealProjects } from './storageHandler.js';
-import { displaySidebar } from './sidebarView.js';
-import { showProject } from './projectView.js';
 import { seedProjectArrays } from './seed.js';
+import { displaySidebar, activateProject } from './displayController.js';
 import './style.css';
 import './project.css';
 import './sidebar.css';
 import './itemDetail.css';
 
 let projectArray = [];
-
-let activeProject = createDefaultProject();
-projectArray.push(activeProject);
+let defaultProject = createDefaultProject();
+projectArray.push(defaultProject);
 
 let seedProjects = seedProjectArrays();
 for (let i = 0; i < seedProjects.length; i++) {
@@ -25,7 +23,6 @@ saveList(projectArray);
 projectArray = retrieveList();
 
 projectArray = createRealProjects(projectArray);
-setActiveProject(projectArray[0]);
 
 function getProjectFromItem(item) {
   let project = projectArray.find(project => project.getId() === item.getProjectId());
@@ -43,23 +40,14 @@ function createDefaultProject() {
   return defaultProject;
 }
 
-function setActiveProject(project) {
-  activeProject = project;
-  showProject(activeProject);
-}
-
-function getActiveProject() {
-  return activeProject;
-}
-
-function initializeView() {
-  showProject(activeProject);
+function initializePage() {
   displaySidebar(projectArray);
+  activateProject(projectArray[0]);
 }
 
 // Show all projects
 
-initializeView();
+initializePage();
 
 
 

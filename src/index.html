@@ -34,9 +34,9 @@
           <div id="item-detail-priority"></div>
           <div id="item-detail-complete"></div>
           <div id="item-detail-notes"></div>
-          <div>
-            <button id="item-detail-edit">Edit</button>
-            <button id="item-detail-delete" class="button-delete">Delete</button>
+          <div class="button-group">
+            <button class="button" id="item-detail-edit">Edit</button>
+            <button class="button-delete" id="item-detail-delete">Delete</button>
           </div>
         </div>
         <form action="" id="new-item-form" class="hidden">
@@ -59,11 +59,9 @@
             <label for="item-complete">Complete</label>
             <input type="checkbox" id="complete-input" name="item-complete">
           </div>
-          <div class="form-group">
-            <label for="item-notes">Notes</label>
-            <textarea name="item-notes" id="notes-input" cols="30" rows="10" placeholder="Notes"></textarea>
-          </div>
-          <div class="form-group">
+          <label for="item-notes">Notes</label>
+          <textarea name="item-notes" id="notes-input" cols="30" rows="10" placeholder="Notes"></textarea>
+          <div class="button-group">
             <button id="item-save" class="button-primary">Save</button>
             <button id="item-cancel" class="button-delete">Cancel</button>
           </div>
