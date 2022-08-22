@@ -105,7 +105,7 @@ h2 {
 	margin: 10px;
 }
 
-button {
+.button-primary {
 	background-color: rgb(48, 177, 228);
 	color: white;
 	border: none;
@@ -113,27 +113,62 @@ button {
 	padding: 7px;
 	font-size: 1rem;
 	font-weight: 400;
+	cursor: pointer;
 }
 
-.button-primary {
-	background-color: rgb(48, 177, 228);
-	color: white;
+.button-primary:hover {
+	background-color: white;
+	color: rgb(48, 177, 228);
+	border: 1px solid rgb(48, 177, 228);
 }
 
 .button-secondary {
-	background-color: rgb(218, 218, 218);
+	background-color: white;
 	color: rgb(48, 177, 228);
+	border: 1px solid rgb(48, 177, 228);
+	border-radius: 5px;
+	padding: 7px;
+	font-size: 1rem;
+	font-weight: 400;
+	cursor: pointer;
+}
+
+.button-secondary:hover {
+	background-color: rgb(48, 177, 228);
+	color: white;
 }
 
 .button-outline {
 	background-color: white;
 	color: rgb(48, 177, 228);
-	border: 1px rgb(48, 177, 228) solid;
+	border: 1px solid rgb(48, 177, 228);
+	border-radius: 5px;
+	padding: 7px;
+	font-size: 1rem;
+	font-weight: 400;
+	cursor: pointer;
+}
+
+.button-outline:hover {
+	background-color: rgb(48, 177, 228);
+	color: white;
 }
 
 .button-delete {
-	background-color: rgb(187, 2, 2);
+	background-color: rgb(185, 25, 25);
 	color: white;
+	border: none;
+	border-radius: 5px;
+	padding: 7px;
+	font-size: 1rem;
+	font-weight: 400;
+	cursor: pointer;
+}
+
+.button-delete:hover {
+	background-color: white;
+	color: rgb(185, 25, 25);
+	border: 1px solid rgb(185, 25, 25);
 }
 
 footer {

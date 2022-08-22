@@ -4,10 +4,10 @@ import { format } from 'date-fns';
 
 let currentProject = document.getElementById('current-project');
 let sidebar = document.querySelector('.sidebar');
-let currentItem = document.getElementById('current-item');
 let itemForm = document.getElementById('new-item-form');
 let itemDetail = document.getElementById('item-detail-wrapper');
 let activeProject = null;
+let activeItem = null;
 
 // Right side of page is either: item detail, edit item form, new item form
 
@@ -18,11 +18,22 @@ export function activateProject(project) {
 
 function setActiveProject(project) {
   activeProject = project;
-  showProject(activeProject);
 }
 
 function getActiveProject() {
   return activeProject;
+}
+
+function setActiveItem(item) {
+  activeItem = item;
+}
+
+function clearActiveItem() {
+  activeItem = null;
+}
+
+function getActiveItem() {
+  return activeItem;
 }
 
 function activateProjectView(project) {
@@ -54,17 +65,10 @@ function showItemDetail(item) {
   // Deactivate any 'active' to-do-item
   clearCurrentItem();
   populateItemDetail(item);
-
-  let detailedItemEdit = document.getElementById('item-detail-edit');
-  detailedItemEdit.addEventListener('click', showItemEditForm(item));
-
-  let detailedItemDelete = document.getElementById('item-detail-delete');
-  // *** ADD EVENT LISTENER TO DELETE ITEM ***
-
-  // Unhide item detail view
-
+  setActiveItem(item);
   unhideItemDetail();
 }
+
 function hideItemDetail() {
   console.log('HIDING item detail');
   itemDetail.classList.add('hidden');
@@ -92,24 +96,20 @@ function populateItemDetail(item) {
   detailedItemTitle.innerText = `${item.getTitle()}`;
 
   let detailedItemDueDate = document.getElementById('item-detail-due-date');
-  detailedItemDueDate.innerText = `Due: ${format(item.getDueDate(), 'h:MMa, MM-dd-yyyy')}`;
+  detailedItemDueDate.innerText = `${format(item.getDueDate(), 'h:MMa, MM-dd-yyyy')}`;
   
-  let detailedItemPriority = document.getElementById('item-details-priority');
-  detailedItemPriority.innerText = `Priority: ${item.getPriority()}`;
+  let detailedItemPriority = document.getElementById('item-detail-priority');
+  detailedItemPriority.innerText = `${item.getPriority()}`;
   
   let detailedItemComplete = document.getElementById('item-detail-complete');
   if (item.getComplete() === true) {
-    detailedItemComplete.innerHTML = 'Completed: <i class="fa-regular fa-square-check"></i>';
+    detailedItemComplete.innerHTML = '<i class="fa-regular fa-square-check"></i>';
   } else {
-    detailedItemComplete.innerHTML = 'Completed: <i class="fa-regular fa-square"></i>';
+    detailedItemComplete.innerHTML = '<i class="fa-regular fa-square"></i>';
   }
   
   let detailedItemNotes = document.getElementById('item-detail-notes');
   detailedItemNotes.innerText = `${item.getNotes()}`;
-}
-
-function disableItemForm() {
-  itemForm.disabled = true;
 }
 
 function showItemEditForm(item) {
@@ -118,6 +118,8 @@ function showItemEditForm(item) {
 
 function showNewItemForm() {
   const newItem = itemFactory();
+  setActiveItem(newItem);
+  activeProject.addItem(newItem);
   showItemForm(newItem);
 }
 
@@ -129,10 +131,9 @@ function showItemForm(item) {
 
   // Due Date (Label included)
   const dueDateInput = document.getElementById('due-date-input');
-  dueDateInput.value = `${format(item.getDueDate(), 'MM-dd-YYY')}`;
+  dueDateInput.value = `${format(item.getDueDate(), 'yyyy-MM-dd')}`;
 
   // Priority (high, medium, low, with low default)
-  priorityField.appendChild(priorityLabel);
   const priorityInput = document.getElementById('priority-input');
   priorityInput.value = item.getPriority();
   
@@ -143,40 +144,6 @@ function showItemForm(item) {
   // Notes (textArea with placeholder)
   const notesInput = document.getElementById('notes-input');
   notesInput.value = item.getNotes();
-
-  // Submit / Save Button
-  const itemSaveButton = document.getElementById('item-save');
-
-  // Add Item (On Submit)
-  itemSaveButton.addEventListener('click', () => {
-    // Accept values for all fields 
-    const newItemTitle = itemForm.elements['item-title'].value;
-    const newItemDueDate = new Date(itemForm.elements['item-due-date'].value);
-    const newItemPriority = itemForm.elements['item-priority'].value;
-    const newItemComplete = itemForm.elements['item-complete'].value;
-    const newItemNotes = itemForm.elements['item-notes'].value;
-
-    // Build item from fields
-    let newItem = itemFactory(newItemTitle, newItemDueDate, newItemPriority, newItemComplete, newItemNotes, activeProject.getId());
-    console.log(activeProject);
-    // Add item to the project
-    project.addItem(newItem);
-
-    // Show the full project, which will have the new one included
-    showProject(project);
-    
-    // Make it the active item to show detail
-    itemForm.reset();
-    showItemDetail(newItem);
-  });
-
-  // Cancel Button
-  const itemCancelButton = document.getElementById('item-cancel');
-
-  itemCancelButton.addEventListener('click', () => { 
-    itemForm.reset();
-    hideItemForm
-  }); 
 
   clearCurrentItem();
   unhideItemForm();
@@ -266,8 +233,6 @@ function showProjectForm(project) {
     addProjectToSidebar(project);
     activateProjectView(project);
     addNewProjectLink();
-    // Activate sidebar title
-    // Remove any active todos
   });
   sidebar.appendChild(newProjectForm);
 }
@@ -276,6 +241,7 @@ function buildItem(item) {
   let itemContainer = document.createElement('div');
   // Title
   let itemTitle = document.createElement('div');
+  itemTitle.classList.add('item-title');
   itemTitle.innerText = `${item.getTitle()}`
 
   // When clicked, show detail in right side of page
@@ -366,16 +332,56 @@ function showProject(project) {
   clearCurrentProject();
   clearCurrentItem();
   currentProject.appendChild(buildProject(project));
-  if(project.getItems().length > 0) {
-    showItemDetail(project.getItems()[0]);
-  }
 }
 
-// Event Listeners
-// *** Click Project on Sidebar ***
-// *** Click ToDo Item for Item Detail ***
-// *** Click Add New Project ***
-// *** Click Add New ToDo Item ***
 // *** Click Edit Item ***
+let detailedItemEdit = document.getElementById('item-detail-edit');
+detailedItemEdit.addEventListener('click', (e) => {
+  showItemEditForm(getActiveItem());
+});
+
 // *** Click Delete Item ***
+let detailedItemDelete = document.getElementById('item-detail-delete');
+detailedItemDelete.addEventListener('click', (e) => {
+  // Get item from form
+  activeProject.removeItem(getActiveItem());
+  clearActiveItem();
+  activateProject(activeProject);
+});
+
 // *** Click Cancel Item Edit *** 
+const itemCancelButton = document.getElementById('item-cancel');
+itemCancelButton.addEventListener('click', (event) => {
+  event.preventDefault();
+  activeProject.removeItem(getActiveItem());
+  itemForm.reset();
+  hideItemForm();
+}); 
+
+// *** Click Submit New ToDo Item ***
+// Submit / Save Button
+const itemSaveButton = document.getElementById('item-save');
+// Add Item (On Submit)
+itemSaveButton.addEventListener('click', (event) => {
+  event.preventDefault();
+  // Accept values for all fields 
+  const newTitle = itemForm.elements['item-title'].value;
+  const newDueDate = new Date(itemForm.elements['item-due-date'].value);
+  const newPriority = itemForm.elements['item-priority'].value;
+  const newComplete = itemForm.elements['item-complete'].value;
+  const newNotes = itemForm.elements['item-notes'].value;
+
+  // Build item from fields
+  activeItem.setTitle(newTitle);
+  activeItem.setDueDate(newDueDate);
+  activeItem.setPriority(newPriority);
+  activeItem.setComplete(newComplete);
+  activeItem.setNotes(newNotes);
+
+  // Show the full project, which will have the new one included
+  activateProject(activeProject);
+  
+  // Make it the active item to show detail
+  itemForm.reset();
+  showItemDetail(activeItem);
+});

@@ -29,12 +29,6 @@ function getProjectFromItem(item) {
   return project;
 }
 
-function deleteItem(item) { 
-  let project = getProjectFromItem(item);
-  project.removeItem(item);
-  saveList(projectArray);
-}
-
 function createDefaultProject() {
   const defaultProject = projectFactory('Main List', []);
   return defaultProject;

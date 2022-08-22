@@ -51,22 +51,41 @@ textarea {
   border: 1px solid rgb(48, 177, 228);
 }
 
-.field {
-margin: 5px 0px;
-}
-
 .form-group {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
-
-
 
 .button-group {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
 }
+
+.item-title {
+  cursor: pointer;
+}
+
+#item-detail-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 5px;
+  padding: 5px;
+  width: 100px;
+}
+
+#item-detail-notes {
+  margin: 10px;
+}
+
+
+
 
 
 

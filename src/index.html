@@ -30,12 +30,22 @@
       <div id="current-item">
         <div id="item-detail-wrapper" class="hidden">
           <h2 id="item-detail-title"></h2>
-          <div id="item-detail-due-date"></div>
-          <div id="item-detail-priority"></div>
-          <div id="item-detail-complete"></div>
+          <div class='form-group'>
+            <div class="detail-text">Due Date</div>
+            <div id="item-detail-due-date"></div>
+          </div>
+          <div class='form-group'>
+            <div class="detail-text">Priority</div>
+            <div id="item-detail-priority"></div>
+          </div>
+          <div class='form-group'>
+            <div class="detail-text">Complete</div>
+            <div id="item-detail-complete"></div>
+          </div>
+          <div class="detail-text">Notes</div>
           <div id="item-detail-notes"></div>
           <div class="button-group">
-            <button class="button" id="item-detail-edit">Edit</button>
+            <button class="button-primary" id="item-detail-edit">Edit</button>
             <button class="button-delete" id="item-detail-delete">Delete</button>
           </div>
         </div>
