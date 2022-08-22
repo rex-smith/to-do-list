@@ -1,4 +1,5 @@
 import projectFactory from './projectBuilder.js';
+import itemFactory from './itemBuilder.js';
 import { saveList, retrieveList, createRealProjects } from './storageHandler.js';
 import { seedProjectArrays } from './seed.js';
 import { displaySidebar, activateProject } from './displayController.js';
@@ -7,26 +8,25 @@ import './project.css';
 import './sidebar.css';
 import './itemDetail.css';
 
+// // Toggle to clear memory
+// localStorage.clear();  
+
 let projectArray = [];
-let defaultProject = createDefaultProject();
-projectArray.push(defaultProject);
-
-let seedProjects = seedProjectArrays();
-for (let i = 0; i < seedProjects.length; i++) {
-  projectArray.push(seedProjects[i]);
-}
-
-// Save seed array to localStorage
-saveList(projectArray);
-
-// Retrieve the array from storage
 projectArray = retrieveList();
 
-projectArray = createRealProjects(projectArray);
+if (projectArray.length === 0) {
+  projectArray.push(createDefaultProject());
+} else {
+  projectArray = createRealProjects(projectArray);
+}
 
-function getProjectFromItem(item) {
-  let project = projectArray.find(project => project.getId() === item.getProjectId());
-  return project;
+export function getProjectArray() {
+  return projectArray;
+}
+
+export function addProjectToProjectArray(project) {
+  projectArray.push(project);
+  saveList(projectArray);
 }
 
 function createDefaultProject() {

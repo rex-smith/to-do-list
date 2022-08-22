@@ -1,5 +1,7 @@
 import itemFactory from './itemBuilder.js';
 import projectFactory from './projectBuilder.js';
+import { saveList } from './storageHandler.js';
+import { addProjectToProjectArray, getProjectArray } from './index.js';
 import { format } from 'date-fns';
 
 let currentProject = document.getElementById('current-project');
@@ -70,22 +72,18 @@ function showItemDetail(item) {
 }
 
 function hideItemDetail() {
-  console.log('HIDING item detail');
   itemDetail.classList.add('hidden');
 }
 
 function unhideItemDetail() {
-  console.log('Unhiding item detail');
   itemDetail.classList.remove('hidden');
 }
 
 function hideItemForm() {
-  console.log('HIDING item form');
   itemForm.classList.add('hidden');
 }
 
 function unhideItemForm() {
-  console.log('Unhiding item form');
   itemForm.classList.remove('hidden');
 }
 
@@ -229,9 +227,11 @@ function showProjectForm(project) {
   newProjectForm.addEventListener('submit', (e) => {
     e.preventDefault();
     project.setTitle(newProjectName.value);
+    // Add to project array and save new state
+    addProjectToProjectArray(project);
     sidebar.removeChild(sidebar.lastChild);
     addProjectToSidebar(project);
-    activateProjectView(project);
+    activateProject(project);
     addNewProjectLink();
   });
   sidebar.appendChild(newProjectForm);
@@ -296,6 +296,8 @@ function buildItem(item) {
     } else {
       itemComplete.innerHTML = '<i class="fa-regular fa-square"></i>';
     }
+    // Save state
+    saveList(getProjectArray());
   });
   itemExtras.appendChild(itemComplete);
   itemContainer.classList.add('to-do-container');
@@ -345,6 +347,7 @@ let detailedItemDelete = document.getElementById('item-detail-delete');
 detailedItemDelete.addEventListener('click', (e) => {
   // Get item from form
   activeProject.removeItem(getActiveItem());
+  saveList(getProjectArray());
   clearActiveItem();
   activateProject(activeProject);
 });
@@ -377,6 +380,7 @@ itemSaveButton.addEventListener('click', (event) => {
   activeItem.setPriority(newPriority);
   activeItem.setComplete(newComplete);
   activeItem.setNotes(newNotes);
+  saveList(getProjectArray());
 
   // Show the full project, which will have the new one included
   activateProject(activeProject);

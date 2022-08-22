@@ -1,7 +1,10 @@
 export default function toDoFactory(title='', dueDate=(new Date()), notes='', priority=3, complete=false, projectId) {
 
   const getTitle = () => { return title } ;
-  const setTitle = (newTitle) => { title = newTitle };
+  const setTitle = (newTitle) => { 
+    console.log('Setting title from ' + title + ' to ' + newTitle);
+    title = newTitle;
+  };
   const getDueDate = () => { return dueDate };
   const setDueDate = (newDueDate) => { dueDate = newDueDate };
   const getNotes = () => { return notes };

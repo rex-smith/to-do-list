@@ -27,11 +27,35 @@ export function storageAvailable(type) {
 }
 
 export function saveList(projectArray) {
+  let projects = [];
+  for (let i = 0; i < projectArray.length; i++) {
+    let project = projectArray[i];
+    let itemArray = [];
+    for (let j = 0; j < project.getItems().length; j++) {
+      let item = project.getItems()[j];
+      let itemObj = {
+        title: item.getTitle(),
+        dueDate: item.getDueDate(),
+        notes: item.getNotes(),
+        priority: item.getPriority(),
+        complete: item.getComplete(),
+        projectId: item.getProjectId()
+      }
+      itemArray.push(itemObj);
+    }
+    let projectObj = {
+      title: project.getTitle(),
+      items: itemArray,
+      pid: project.getId()
+    }
+    projects.push(projectObj);
+  }
+
   if (storageAvailable('localStorage')) {
     if (localStorage.length > 0) {
       localStorage.clear();
     }
-    localStorage.setItem('project-array', JSON.stringify(projectArray));
+    localStorage.setItem('project-array', JSON.stringify(projects));
   } else {
     console.log('No storage set up!');
   }
@@ -45,6 +69,7 @@ export function retrieveList() {
       return projectArray;
     } else {
       console.log('Nothing in storage!');
+      return [];
     }
   } else {
     console.log('No storage set up!');
@@ -61,7 +86,7 @@ export function createRealProjects(projectArray) {
   for (let i = 0; i < projectArray.length; i++) {
     let realItemArray = [];
     let project = projectArray[i];
-    let itemArray = project.itemArray;
+    let itemArray = project.items;
     for (let j = 0; j < itemArray.length; j++) {
       realItemArray.push(createRealItem(itemArray[j]));
     }
