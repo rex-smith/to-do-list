@@ -1,50 +1,40 @@
 import itemFactory from './itemBuilder.js';
-import projectFactory from './projectBuilder.js';
-import { saveList } from './storageHandler.js';
-import { addProjectToProjectArray, getProjectArray } from './index.js';
+import { getProjectArray } from './index.js';
 import { format } from 'date-fns';
 
 let currentProject = document.getElementById('current-project');
 let sidebar = document.querySelector('.sidebar');
 let itemForm = document.getElementById('new-item-form');
 let itemDetail = document.getElementById('item-detail-wrapper');
-let activeProject = null;
-let activeItem = null;
+let newProjectLink = document.getElementById('side-add-new');
+let newProjectForm = document.getElementById('new-project-form');
+let sideMainTitle = document.getElementById('side-main-title');
 
 // Right side of page is either: item detail, edit item form, new item form
 
-export function activateProject(project) {
-  setActiveProject(project);
-  activateProjectView(project);
+function showProject(project) {
+  currentProject.appendChild(buildProject(project));
 }
 
-function setActiveProject(project) {
-  activeProject = project;
+export function showAllProjects() {
+  clearCurrentProjectContainer();
+  clearCurrentItemContainer();
+  clearActiveSidebarTitle();
+  sideMainTitle.classList.add('active-sidebar-title');
+  for (let i = 0; i < getProjectArray().length; i++) {
+    showProject(getProjectArray()[i]);
+  }
 }
 
-function getActiveProject() {
-  return activeProject;
-}
-
-function setActiveItem(item) {
-  activeItem = item;
-}
-
-function clearActiveItem() {
-  activeItem = null;
-}
-
-function getActiveItem() {
-  return activeItem;
-}
-
-function activateProjectView(project) {
-  clearCurrentItem();
+export function showOnlyProject(project) {
+  // Add project to list container after clearing
+  clearCurrentProjectContainer();
+  clearCurrentItemContainer();
   showProject(project);
   highlightProjectSidebar(project);
 }
 
-function clearCurrentItem() {
+function clearCurrentItemContainer() {
   if (!itemForm.classList.contains('hidden')) {
     hideItemForm();
   }
@@ -53,7 +43,7 @@ function clearCurrentItem() {
   }
 }
 
-function clearCurrentProject() {
+function clearCurrentProjectContainer() {
   removeChildren(currentProject);
 }
 
@@ -63,11 +53,10 @@ function removeChildren(element) {
   }
 }
 
-function showItemDetail(item) {
+export function showItemDetail(item) {
   // Deactivate any 'active' to-do-item
-  clearCurrentItem();
+  clearCurrentItemContainer();
   populateItemDetail(item);
-  setActiveItem(item);
   unhideItemDetail();
 }
 
@@ -88,8 +77,10 @@ function unhideItemForm() {
 }
 
 function populateItemDetail(item) {
-  // Populate Detail View
+  // Set itemId property to item's id
+  itemDetail.dataset.itemId = item.getId();
 
+  // Populate Detail View
   let detailedItemTitle = document.getElementById('item-detail-title');
   detailedItemTitle.innerText = `${item.getTitle()}`;
 
@@ -110,18 +101,20 @@ function populateItemDetail(item) {
   detailedItemNotes.innerText = `${item.getNotes()}`;
 }
 
-function showItemEditForm(item) {
+export function showEditItemForm(item) {
   showItemForm(item);
 }
 
-function showNewItemForm() {
+export function showNewItemForm(project) {
   const newItem = itemFactory();
-  setActiveItem(newItem);
-  activeProject.addItem(newItem);
+  newItem.setProjectId(project.getId());
+  project.addItem(newItem);
   showItemForm(newItem);
 }
 
 function showItemForm(item) {
+  // Set itemId property to item's id
+  itemForm.dataset.itemId = item.getId(); 
 
   // Title Input (Placeholder instead of label)
   const titleInput = document.getElementById('title-input');
@@ -143,7 +136,7 @@ function showItemForm(item) {
   const notesInput = document.getElementById('notes-input');
   notesInput.value = item.getNotes();
 
-  clearCurrentItem();
+  clearCurrentItemContainer();
   unhideItemForm();
 }
 
@@ -151,21 +144,16 @@ export function displaySidebar(projectArray) {
   for (let i = 0; i < projectArray.length; i++) {
     addProjectToSidebar(projectArray[i]);
   }
-  addNewProjectLink();
+  showNewProjectLink();
 }
 
-function addProjectToSidebar(project) {
+export function addProjectToSidebar(project) {
   // Add name to sidebar
   let sideProjectTitle = document.createElement('div');
   sideProjectTitle.innerText = `${project.getTitle()}`
   sideProjectTitle.id = `sidebar-title-${project.getId()}`;
   sideProjectTitle.classList.add('side-project-title');
   sidebar.appendChild(sideProjectTitle);
-
-  // Add event listener to activate project when sidelink clicked on
-  sideProjectTitle.addEventListener('click', () => {
-    activateProject(project);
-  });
 }
 
 function clearActiveSidebarTitle() {
@@ -192,69 +180,32 @@ function activateSidebarTitle(element) {
   element.classList.add('active-sidebar-title');
 }
 
-function addNewProjectLink() {
-  let sideProjectNew = document.createElement('div');
-  sideProjectNew.innerText = '+ New Project'
-  sideProjectNew.id = 'side-add-new';
-  sideProjectNew.addEventListener('click', () => {
-    showNewProjectForm();
-  });
-  sidebar.appendChild(sideProjectNew);
+export function showNewProjectLink() {
+  newProjectLink.classList.remove('hidden');
+  newProjectForm.classList.add('hidden');
 }
 
-function showNewProjectForm() {
-  // Create input element for name, on submit, create new project and show
-  let newProject = projectFactory('', []);
-  showProjectForm(newProject);
-}
-
-function showProjectForm(project) {
-  // Create input element for name, on submit, create new project and show
-  if (document.getElementById('new-project-form')) {
-    sidebar.removeChild(document.getElementById('new-project-form'));
-  }
-  if (document.getElementById('side-add-new')) {
-    sidebar.removeChild(document.getElementById('side-add-new'));
-  }
-
-  let newProjectForm = document.createElement('form');
-  let newProjectName = document.createElement('input');
-  newProjectName.value = project.getTitle();
-  newProjectForm.id = 'new-project-form';
-  newProjectName.setAttribute('type', 'text');
-  newProjectName.setAttribute('placeholder', 'Project Name');
-  newProjectForm.appendChild(newProjectName);
-  newProjectForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    project.setTitle(newProjectName.value);
-    // Add to project array and save new state
-    addProjectToProjectArray(project);
-    sidebar.removeChild(sidebar.lastChild);
-    addProjectToSidebar(project);
-    activateProject(project);
-    addNewProjectLink();
-  });
-  sidebar.appendChild(newProjectForm);
+export function showNewProjectForm() {
+  newProjectLink.classList.add('hidden');
+  newProjectForm.classList.remove('hidden');
 }
 
 function buildItem(item) {
   let itemContainer = document.createElement('div');
+  itemContainer.classList.add('item-container');
+  itemContainer.id = `item-${item.getId()}`;
   // Title
   let itemTitle = document.createElement('div');
   itemTitle.classList.add('item-title');
   itemTitle.innerText = `${item.getTitle()}`
 
-  // When clicked, show detail in right side of page
-  itemTitle.addEventListener('click', () => {
-    showItemDetail(item);
-  });
   itemContainer.appendChild(itemTitle);
 
   // Create side content for each item
   let itemExtras = document.createElement('div');
   itemExtras.classList.add('item-extras');
 
-  // Due date aligned for viewer
+  // Due date
   let itemDueDate = document.createElement('div');
   itemDueDate.classList.add('due-date');
   itemExtras.appendChild(itemDueDate);
@@ -287,8 +238,16 @@ function buildItem(item) {
   } else {
     itemComplete.innerHTML = '<i class="fa-regular fa-square"></i>';
   }
-  itemComplete.addEventListener('click', () => {
-    item.setComplete(!item.getComplete());
+
+  itemExtras.appendChild(itemComplete);
+  itemContainer.classList.add('to-do-container');
+  itemContainer.appendChild(itemExtras);
+  return itemContainer;
+}
+
+export function toggleItemComplete(item) {
+  item.setComplete(!item.getComplete());
+  let itemContainer = document.getElementById(`item-container-${item.getId()}`);
     itemContainer.classList.toggle('complete');
     if (item.getComplete() === true) {
       itemContainer.classList.add('complete');
@@ -296,13 +255,33 @@ function buildItem(item) {
     } else {
       itemComplete.innerHTML = '<i class="fa-regular fa-square"></i>';
     }
-    // Save state
-    saveList(getProjectArray());
-  });
-  itemExtras.appendChild(itemComplete);
-  itemContainer.classList.add('to-do-container');
-  itemContainer.appendChild(itemExtras);
-  return itemContainer;
+}
+
+function getSortOrder() {
+  let sortOrderOptions = document.getElementsByName('sort-order');
+  for (let i = 0; i < sortOrderOptions.length; i++) {
+    if (sortOrderOptions[i].checked) {
+      return sortOrderOptions[i].value;
+    }
+  }
+}
+
+function sortItemArray(itemArray) {
+  // Sort based on case
+  switch (getSortOrder()) {
+    case 'due-date':
+      itemArray.sort((a, b) => a.getDueDate() - b.getDueDate());
+      break;
+    case 'priority':
+      itemArray.sort((a, b) => a.getPriority() - b.getPriority());
+      break;
+    case 'complete':
+      itemArray.sort((a, b) => a.getComplete() - b.getComplete()).reverse();
+      break;
+    default:
+      itemArray.sort((a, b) => a.getId() - b.getId());
+    }
+    return itemArray;
 }
 
 function buildProject(project) {
@@ -312,80 +291,19 @@ function buildProject(project) {
   newProjectTitle.innerText = `${project.getTitle()}`;
   newProjectTitle.classList.add('project-title');
   let newProjectList = document.createElement('div');
-  let itemArray = project.getItems();
-  for (let i = 0; i < itemArray.length; i++) {
-    let itemContainer = buildItem(itemArray[i]);
+  let sortedItemArray = sortItemArray(project.getItems());
+
+  for (let i = 0; i < sortedItemArray.length; i++) {
+    let itemContainer = buildItem(sortedItemArray[i]);
     newProjectList.appendChild(itemContainer);
   }
   // Add new item button
   let addItemButton = document.createElement('div');
   addItemButton.innerText = '+ Add New Item';
   addItemButton.classList.add('add-item-button');
-  addItemButton.addEventListener('click', () => {
-    showNewItemForm();
-  });
+  // Set project id on button
+  addItemButton.dataset.projectId = project.getId();
   newProjectList.appendChild(addItemButton);
   newProject.appendChild(newProjectList);
   return newProject;
 }
-
-function showProject(project) {
-  // Add project to list container after clearing
-  clearCurrentProject();
-  clearCurrentItem();
-  currentProject.appendChild(buildProject(project));
-}
-
-// *** Click Edit Item ***
-let detailedItemEdit = document.getElementById('item-detail-edit');
-detailedItemEdit.addEventListener('click', (e) => {
-  showItemEditForm(getActiveItem());
-});
-
-// *** Click Delete Item ***
-let detailedItemDelete = document.getElementById('item-detail-delete');
-detailedItemDelete.addEventListener('click', (e) => {
-  // Get item from form
-  activeProject.removeItem(getActiveItem());
-  saveList(getProjectArray());
-  clearActiveItem();
-  activateProject(activeProject);
-});
-
-// *** Click Cancel Item Edit *** 
-const itemCancelButton = document.getElementById('item-cancel');
-itemCancelButton.addEventListener('click', (event) => {
-  event.preventDefault();
-  activeProject.removeItem(getActiveItem());
-  itemForm.reset();
-  hideItemForm();
-}); 
-
-// *** Click Submit New ToDo Item ***
-// Submit / Save Button
-const itemSaveButton = document.getElementById('item-save');
-// Add Item (On Submit)
-itemSaveButton.addEventListener('click', (event) => {
-  event.preventDefault();
-  // Accept values for all fields 
-  const newTitle = itemForm.elements['item-title'].value;
-  const newDueDate = new Date(itemForm.elements['item-due-date'].value);
-  const newPriority = itemForm.elements['item-priority'].value;
-  const newComplete = itemForm.elements['item-complete'].value;
-  const newNotes = itemForm.elements['item-notes'].value;
-
-  // Build item from fields
-  activeItem.setTitle(newTitle);
-  activeItem.setDueDate(newDueDate);
-  activeItem.setPriority(newPriority);
-  activeItem.setComplete(newComplete);
-  activeItem.setNotes(newNotes);
-  saveList(getProjectArray());
-
-  // Show the full project, which will have the new one included
-  activateProject(activeProject);
-  
-  // Make it the active item to show detail
-  itemForm.reset();
-  showItemDetail(activeItem);
-});

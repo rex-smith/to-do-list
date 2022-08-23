@@ -1,10 +1,11 @@
+let itemCounter = 0;
+
 export default function toDoFactory(title='', dueDate=(new Date()), notes='', priority=3, complete=false, projectId) {
+  itemCounter++;
+  const id = itemCounter;
 
   const getTitle = () => { return title } ;
-  const setTitle = (newTitle) => { 
-    console.log('Setting title from ' + title + ' to ' + newTitle);
-    title = newTitle;
-  };
+  const setTitle = (newTitle) => { title = newTitle };
   const getDueDate = () => { return dueDate };
   const setDueDate = (newDueDate) => { dueDate = newDueDate };
   const getNotes = () => { return notes };
@@ -15,6 +16,8 @@ export default function toDoFactory(title='', dueDate=(new Date()), notes='', pr
   const setComplete = (newComplete) => { complete = newComplete };
   const getProjectId = () => { return projectId };
   const setProjectId = (newProjectId) => { projectId = newProjectId };
+  const getId = () => { return id };
+  const setId = (newId) => { id = newId };
 
   return {
     title,
@@ -22,6 +25,8 @@ export default function toDoFactory(title='', dueDate=(new Date()), notes='', pr
     notes,
     priority,
     complete,
+    projectId,
+    id,
     getTitle,
     setTitle,
     getDueDate,
@@ -33,6 +38,8 @@ export default function toDoFactory(title='', dueDate=(new Date()), notes='', pr
     getComplete,
     setComplete,
     getProjectId,
-    setProjectId
+    setProjectId,
+    getId,
+    setId
   }
 }

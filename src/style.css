@@ -77,6 +77,29 @@ nav {
 	justify-content: flex-end;
 }
 
+.switch-toggle {
+	float: left;
+	background: #242729;
+	border-radius: 5px;
+	margin: 10px;
+}
+.switch-toggle input {
+ position: absolute;
+ opacity: 0;
+}
+
+.switch-toggle input + label {
+ padding: 7px;
+ float: left;	
+ color: #fff;
+ cursor: pointer;
+}
+
+.switch-toggle input:checked + label {
+ background: green;
+ border-radius: 5px;
+}
+
 .nav-link {
 	margin: auto 20px;
 	border-top: 1px solid white;
@@ -89,7 +112,7 @@ nav {
 .main-container {
 	width: 1000px;
 	margin: 0 auto;
-	height: calc(100vh - 120px);
+	min-height: calc(100vh - 120px);
 	display: grid;
 	grid-template-columns: 1fr 5fr;
 }

@@ -15,13 +15,35 @@
     <div class="nav-brand">
       ToDoey!
     </div>
+    <div class="nav-menu">
+      <div class="switch-toggle">
+
+        <input id="sort-due-date" name="sort-order" type="radio" value="due-date" checked="check" />
+        <label for="sort-due-date"  onclick="">Due Date</label>
+      
+        <input id="sort-priority" name="sort-order" value="priority" type="radio" />
+        <label for="sort-priority" onclick="">Priority</label>
+      
+        <input id="sort-complete" name="sort-order" value="complete" type="radio" />
+        <label for="sort-complete" onclick="">Complete</label>
+      
+      </div>
+    </div>
   </nav>
   <div class="main-container">
     <aside>
-      <h2 id="side-main-title">Projects</h2>
+      <h2 id="side-main-title" class="active-sidebar-title">All Projects</h2>
       <div class="sidebar">
 
       </div>
+      <div id="side-add-new">
+        <i class="fas fa-plus"></i>
+        <p> Add Project</p>
+      </div>
+      <form id="new-project-form" class="hidden">
+        <input type="text" name="title" id="new-project-input" placeholder="New Project">
+        <button type="submit" id="new-project-submit" class="hidden">Add</button>
+      </form>
     </aside>
     <div class="list-container">
       <div id="current-project">
@@ -72,7 +94,7 @@
           <label for="item-notes">Notes</label>
           <textarea name="item-notes" id="notes-input" cols="30" rows="10" placeholder="Notes"></textarea>
           <div class="button-group">
-            <button id="item-save" class="button-primary">Save</button>
+            <button type="submit" id="item-save" class="button-primary">Save</button>
             <button id="item-cancel" class="button-delete">Cancel</button>
           </div>
         </form>

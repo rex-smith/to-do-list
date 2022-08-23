@@ -39,14 +39,15 @@ export function saveList(projectArray) {
         notes: item.getNotes(),
         priority: item.getPriority(),
         complete: item.getComplete(),
-        projectId: item.getProjectId()
+        projectId: item.getProjectId(),
+        id: item.getId()
       }
       itemArray.push(itemObj);
     }
     let projectObj = {
       title: project.getTitle(),
       items: itemArray,
-      pid: project.getId()
+      id: project.getId()
     }
     projects.push(projectObj);
   }
@@ -77,7 +78,13 @@ export function retrieveList() {
 }
 
 export function createRealItem(item) {
-  let realItem = itemFactory(item.title, new Date(item.dueDate), item.notes, item.priority, item.complete);
+  let realItem = itemFactory( item.title,
+                              new Date(item.dueDate),
+                              item.notes,
+                              item.priority,
+                              item.complete,
+                              item.projectId,
+                              item.id );
   return realItem;
 }
 
@@ -90,7 +97,7 @@ export function createRealProjects(projectArray) {
     for (let j = 0; j < itemArray.length; j++) {
       realItemArray.push(createRealItem(itemArray[j]));
     }
-    let realProject = projectFactory(project.title, realItemArray);
+    let realProject = projectFactory(project.title, realItemArray, project.id);
     realProjectArray.push(realProject);
   }
   return realProjectArray;
