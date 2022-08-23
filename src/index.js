@@ -1,6 +1,6 @@
 import projectFactory from './projectBuilder.js';
 import { saveList, retrieveList, createRealProjects } from './storageHandler.js';
-import { showItemDetail, displaySidebar, toggleItemComplete, showNewProjectLink, showNewProjectForm, showAllProjects, addProjectToSidebar, showOnlyProject, showEditItemForm, showNewItemForm } from './displayController.js';
+import { showItemDetail, hideItemForm, displaySidebar, toggleItemComplete, showNewProjectLink, showNewProjectForm, showAllProjects, addProjectToSidebar, showOnlyProject, showEditItemForm, showNewItemForm, refreshSidebar, clearItemForm } from './displayController.js';
 import './style.css';
 import './project.css';
 import './sidebar.css';
@@ -46,6 +46,11 @@ export function addProjectToProjectArray(project) {
   saveList(projectArray);
 }
 
+function removeProjectFromProjectArray(project) {
+  let index = projectArray.indexOf(project);
+  projectArray.splice(index, 1);
+}
+
 function createDefaultProject() {
   const defaultProject = projectFactory('Main List', []);
   return defaultProject;
@@ -85,11 +90,13 @@ function masterHandler(e) {
     showItemDetail(item);
   }
   // Clicking complete box on item should toggle complete status
-  if (e.target.classList.contains('item-complete')) {
-    let id = idFromHTMLId(e.target.parentNode.parentNode.id); // Item container is parent of item extras which is parent
-    let item = getItemFromId(id); 
+  if (e.target.parentNode.classList.contains('item-complete')) {
+    let itemContainer = e.target.parentNode.parentNode.parentNode;
+    let id = parseInt(idFromHTMLId(itemContainer.id)); // Item container is parent of item extras which is parent
+    let item = getItemFromId(id);
     toggleItemComplete(item);
   }
+
   // Clicking New Item Button should show new item form for new item in project
   if (e.target.classList.contains('add-item-button')) {
     let projectId = parseInt(e.target.dataset.projectId)
@@ -104,24 +111,30 @@ function masterHandler(e) {
   }
   // Clicking Delete on Item Detail
   if (e.target.id === 'item-detail-delete') {
-    let item = getItemFromId(parseInt(e.target.dataset.itemId));
+    let item = getItemFromId(parseInt(e.target.parentNode.parentNode.dataset.itemId));
     let project = getProjectFromItem(item);
     project.removeItem(item);
     saveList(projectArray);
     showOnlyProject(project);
   }
-  // Clicking Save on New Item Form
-  // if (e.target.id === 'item-save') {
-  //   let item = getItemFromId(e.target.dataset.itemId);
-  //   project.addItem(item);
-  //   saveList(projectArray);
-  // }
 
   // Clicking Cancel on New Item Form
   if (e.target.id === 'item-cancel') {
-    itemForm.reset();
+    e.preventDefault();
+    clearItemForm();
     hideItemForm();
   }
+
+  // Clicking on Delete Project Button
+  if (e.target.classList.contains('project-delete')) {
+    let projectId = parseInt(idFromHTMLId(e.target.id));
+    let project = getProjectFromId(projectId);
+    removeProjectFromProjectArray(project);
+    refreshSidebar();
+    saveList(projectArray);
+    showAllProjects();
+  }
+
   // Changing the sort order will trigger the list to be sorted and shown
   if (e.target.parentNode.classList.contains('switch-toggle')) {
     if (document.querySelector('.active-sidebar-title').id === 'side-main-title') {
@@ -150,11 +163,11 @@ newProjectForm.addEventListener('submit', (e) => {
 let itemForm = document.getElementById('new-item-form');
 itemForm.addEventListener('submit', (e) => {
   e.preventDefault();
-  // Accept values for all fields 
+  // Accept values for all fields
   const newTitle = itemForm.elements['item-title'].value;
   const newDueDate = new Date(itemForm.elements['item-due-date'].value);
   const newPriority = itemForm.elements['item-priority'].value;
-  const newComplete = itemForm.elements['item-complete'].value;
+  const newComplete = itemForm.elements['item-complete'].checked;
   const newNotes = itemForm.elements['item-notes'].value;
 
   // Get item from dataset value
@@ -175,8 +188,6 @@ itemForm.addEventListener('submit', (e) => {
   itemForm.reset();
   showItemDetail(item);
 });
-
-
 
 // Show all projects
 

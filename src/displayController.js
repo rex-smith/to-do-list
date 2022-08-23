@@ -1,6 +1,7 @@
 import itemFactory from './itemBuilder.js';
 import { getProjectArray } from './index.js';
 import { format } from 'date-fns';
+import { saveList, storageAvailable } from './storageHandler.js';
 
 let currentProject = document.getElementById('current-project');
 let sidebar = document.querySelector('.sidebar');
@@ -11,6 +12,7 @@ let newProjectForm = document.getElementById('new-project-form');
 let sideMainTitle = document.getElementById('side-main-title');
 
 // Right side of page is either: item detail, edit item form, new item form
+// localStorage.clear();
 
 function showProject(project) {
   currentProject.appendChild(buildProject(project));
@@ -68,12 +70,16 @@ function unhideItemDetail() {
   itemDetail.classList.remove('hidden');
 }
 
-function hideItemForm() {
+export function hideItemForm() {
   itemForm.classList.add('hidden');
 }
 
 function unhideItemForm() {
   itemForm.classList.remove('hidden');
+}
+
+export function clearItemForm() {
+  itemForm.reset();
 }
 
 function populateItemDetail(item) {
@@ -85,7 +91,7 @@ function populateItemDetail(item) {
   detailedItemTitle.innerText = `${item.getTitle()}`;
 
   let detailedItemDueDate = document.getElementById('item-detail-due-date');
-  detailedItemDueDate.innerText = `${format(item.getDueDate(), 'h:MMa, MM-dd-yyyy')}`;
+  detailedItemDueDate.innerText = `${format(item.getDueDate(), 'M-dd-yyyy')}`;
   
   let detailedItemPriority = document.getElementById('item-detail-priority');
   detailedItemPriority.innerText = `${item.getPriority()}`;
@@ -130,7 +136,7 @@ function showItemForm(item) {
   
   // Complete (checkbox, with not checked default)
   const completeInput = document.getElementById('complete-input');
-  completeInput.value = item.getComplete();
+  completeInput.checked = item.getComplete();
 
   // Notes (textArea with placeholder)
   const notesInput = document.getElementById('notes-input');
@@ -154,6 +160,15 @@ export function addProjectToSidebar(project) {
   sideProjectTitle.id = `sidebar-title-${project.getId()}`;
   sideProjectTitle.classList.add('side-project-title');
   sidebar.appendChild(sideProjectTitle);
+}
+
+function clearSidebar() {
+  removeChildren(sidebar);
+}
+
+export function refreshSidebar() {
+  clearSidebar();
+  displaySidebar(getProjectArray());
 }
 
 function clearActiveSidebarTitle() {
@@ -209,52 +224,61 @@ function buildItem(item) {
   let itemDueDate = document.createElement('div');
   itemDueDate.classList.add('due-date');
   itemExtras.appendChild(itemDueDate);
-  itemDueDate.innerText = `${format(item.getDueDate(), 'MM-dd-yy')}`
+  itemDueDate.innerText = `${format(item.getDueDate(), 'MM-dd-yyyy')}`;
 
   // Handle different box shadow based on priority and add flags
   let itemPriority = document.createElement('div');
   itemPriority.classList.add('priority-flag');
-  if (item.getPriority() === 1) {
+  itemPriority.innerHTML = '<i class="fa-solid fa-flag"></i>';
+  if (item.getPriority() === '1') {
     itemContainer.classList.add('high-priority');
-    itemPriority.innerHTML = '<i class="fa-solid fa-flag"></i>';
     itemPriority.classList.add('red-flag');
-  } else if (item.getPriority() === 2) {
+  } else if (item.getPriority() === '2') {
     itemContainer.classList.add('medium-priority');
-    itemPriority.innerHTML = '<i class="fa-solid fa-flag"></i>';
     itemPriority.classList.add('orange-flag');
   } else {
     itemContainer.classList.add('low-priority');
-    itemPriority.innerHTML = '<i class="fa-solid fa-flag"></i>';
     itemPriority.classList.add('transparent-flag');
   }
   itemExtras.appendChild(itemPriority);
 
   // Checkbox and coloring based on completeness
   let itemComplete = document.createElement('div');
-  itemComplete.classList.add('complete-box');
-  if (item.getComplete() === true) {
-    itemContainer.classList.add('complete');
-    itemComplete.innerHTML = '<i class="fa-regular fa-square-check"></i>';
-  } else {
-    itemComplete.innerHTML = '<i class="fa-regular fa-square"></i>';
-  }
-
+  itemComplete.classList.add('item-complete');
+  let checkedBox = document.createElement('i');
+  checkedBox.classList.add("fa-regular", "fa-square-check");
+  let uncheckedBox = document.createElement('i');
+  uncheckedBox.classList.add("fa-regular", "fa-square");
+  itemComplete.appendChild(checkedBox);
+  itemComplete.appendChild(uncheckedBox);
   itemExtras.appendChild(itemComplete);
   itemContainer.classList.add('to-do-container');
   itemContainer.appendChild(itemExtras);
+  displayCompleteStatus(item, itemContainer);
   return itemContainer;
+}
+
+function displayCompleteStatus(item, itemContainer) {
+  if (!itemContainer) {
+    itemContainer = document.getElementById(`item-${item.getId()}`);
+  }
+  let checkedBox = itemContainer.querySelector('.fa-square-check');
+  let uncheckedBox = itemContainer.querySelector('.fa-square');
+  if (item.getComplete() === true) {
+    itemContainer.classList.add('complete');
+    uncheckedBox.classList.add('hidden');
+    checkedBox.classList.remove('hidden');
+  } else {
+    itemContainer.classList.remove('complete');
+    checkedBox.classList.add('hidden');
+    uncheckedBox.classList.remove('hidden');
+  }
 }
 
 export function toggleItemComplete(item) {
   item.setComplete(!item.getComplete());
-  let itemContainer = document.getElementById(`item-container-${item.getId()}`);
-    itemContainer.classList.toggle('complete');
-    if (item.getComplete() === true) {
-      itemContainer.classList.add('complete');
-      itemComplete.innerHTML = '<i class="fa-regular fa-square-check"></i>';
-    } else {
-      itemComplete.innerHTML = '<i class="fa-regular fa-square"></i>';
-    }
+  saveList(getProjectArray());
+  displayCompleteStatus(item);
 }
 
 function getSortOrder() {
@@ -276,7 +300,7 @@ function sortItemArray(itemArray) {
       itemArray.sort((a, b) => a.getPriority() - b.getPriority());
       break;
     case 'complete':
-      itemArray.sort((a, b) => a.getComplete() - b.getComplete()).reverse();
+      itemArray.sort((a, b) => a.getComplete() - b.getComplete());
       break;
     default:
       itemArray.sort((a, b) => a.getId() - b.getId());
@@ -286,8 +310,16 @@ function sortItemArray(itemArray) {
 
 function buildProject(project) {
   let newProject = document.createElement('div');
+  let newProjectTitleContainer = document.createElement('div');
+  newProjectTitleContainer.classList.add('project-title-container');
   let newProjectTitle = document.createElement('h2');
-  newProject.appendChild(newProjectTitle);
+  newProjectTitleContainer.appendChild(newProjectTitle);
+  let newProjectDeleteButton = document.createElement('button');
+  newProjectDeleteButton.classList.add('project-delete');
+  newProjectDeleteButton.innerText = 'Delete';
+  newProjectDeleteButton.id = `delete-project-${project.getId()}`;
+  newProjectTitleContainer.appendChild(newProjectDeleteButton);
+  newProject.appendChild(newProjectTitleContainer);
   newProjectTitle.innerText = `${project.getTitle()}`;
   newProjectTitle.classList.add('project-title');
   let newProjectList = document.createElement('div');
