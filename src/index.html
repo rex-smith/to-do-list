@@ -1,108 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/8442c04c41.js" crossorigin="anonymous"></script>
-  <title>To-do List</title>
-</head>
-<body>
-  <nav>
-    <div class="nav-brand">
-      ToDoey!
-    </div>
-    <div class="nav-menu">
-      <div class="switch-toggle">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/8442c04c41.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>To-do List</title>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-brand">ToDoey!</div>
+      <div class="nav-menu">
+        <div class="switch-toggle">
+          <input
+            id="sort-due-date"
+            name="sort-order"
+            type="radio"
+            value="due-date"
+            checked="check"
+          />
+          <label for="sort-due-date" onclick="">Due Date</label>
 
-        <input id="sort-due-date" name="sort-order" type="radio" value="due-date" checked="check" />
-        <label for="sort-due-date"  onclick="">Due Date</label>
-      
-        <input id="sort-priority" name="sort-order" value="priority" type="radio" />
-        <label for="sort-priority" onclick="">Priority</label>
-      
-        <input id="sort-complete" name="sort-order" value="complete" type="radio" />
-        <label for="sort-complete" onclick="">Complete</label>
-      
-      </div>
-    </div>
-  </nav>
-  <div class="main-container">
-    <aside>
-      <h2 id="side-main-title" class="active-sidebar-title">All Projects</h2>
-      <div class="sidebar">
+          <input
+            id="sort-priority"
+            name="sort-order"
+            value="priority"
+            type="radio"
+          />
+          <label for="sort-priority" onclick="">Priority</label>
 
-      </div>
-      <div id="side-add-new">
-        <i class="fas fa-plus"></i>
-        <p> Add Project</p>
-      </div>
-      <form id="new-project-form" class="hidden">
-        <input type="text" name="title" id="new-project-input" placeholder="New Project">
-        <button type="submit" id="new-project-submit" class="hidden">Add</button>
-      </form>
-    </aside>
-    <div class="list-container">
-      <div id="current-project">
-
-      </div>
-      <div id="current-item">
-        <div id="item-detail-wrapper" class="hidden">
-          <h2 id="item-detail-title"></h2>
-          <div class='form-group'>
-            <div class="detail-text">Due Date</div>
-            <div id="item-detail-due-date"></div>
-          </div>
-          <div class='form-group'>
-            <div class="detail-text">Priority</div>
-            <div id="item-detail-priority"></div>
-          </div>
-          <div class='form-group'>
-            <div class="detail-text">Complete</div>
-            <div id="item-detail-complete"></div>
-          </div>
-          <div class="detail-text">Notes</div>
-          <div id="item-detail-notes"></div>
-          <div class="button-group">
-            <button class="button-primary" id="item-detail-edit">Edit</button>
-            <button class="button-delete" id="item-detail-delete">Delete</button>
-          </div>
+          <input
+            id="sort-complete"
+            name="sort-order"
+            value="complete"
+            type="radio"
+          />
+          <label for="sort-complete" onclick="">Complete</label>
         </div>
-        <form action="" id="new-item-form" class="hidden">
-          <div class="form-group">
-            <input type="text" id="title-input" name="item-title" placeholder="Title">
-          </div>
-          <div class="form-group">
-            <label for="item-due-date">Due Date</label>
-            <input type="date" id="due-date-input" name="item-due-date">
-          </div>
-          <div class="form-group">
-            <label for="item-priority">Priority</label>
-            <select name="item-priority" id="priority-input">
-              <option value="3" selected>Low</option>
-              <option value="2">Medium</option>
-              <option value="1">High</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="item-complete">Complete</label>
-            <input type="checkbox" id="complete-input" name="item-complete">
-          </div>
-          <label for="item-notes">Notes</label>
-          <textarea name="item-notes" id="notes-input" cols="30" rows="10" placeholder="Notes"></textarea>
-          <div class="button-group">
-            <button type="submit" id="item-save" class="button-primary">Save</button>
-            <button id="item-cancel" class="button-delete">Cancel</button>
-          </div>
+      </div>
+    </nav>
+    <div class="main-container">
+      <aside>
+        <h2 id="side-main-title" class="active-sidebar-title">All Projects</h2>
+        <div class="sidebar"></div>
+        <div id="side-add-new">
+          <i class="fas fa-plus"></i>
+          <p>Add Project</p>
+        </div>
+        <form id="new-project-form" class="hidden">
+          <input
+            type="text"
+            name="title"
+            id="new-project-input"
+            placeholder="New Project"
+          />
+          <button type="submit" id="new-project-submit" class="hidden">
+            Add
+          </button>
         </form>
+      </aside>
+      <div class="list-container">
+        <div id="current-project"></div>
+        <div id="current-item">
+          <div id="item-detail-wrapper" class="hidden">
+            <h2 id="item-detail-title"></h2>
+            <div class="form-group">
+              <div class="detail-text">Due Date</div>
+              <div id="item-detail-due-date"></div>
+            </div>
+            <div class="form-group">
+              <div class="detail-text">Priority</div>
+              <div id="item-detail-priority"></div>
+            </div>
+            <div class="form-group">
+              <div class="detail-text">Complete</div>
+              <div id="item-detail-complete"></div>
+            </div>
+            <div class="detail-text">Notes</div>
+            <div id="item-detail-notes"></div>
+            <div class="button-group">
+              <button class="button-primary" id="item-detail-edit">Edit</button>
+              <button class="button-delete" id="item-detail-delete">
+                Delete
+              </button>
+            </div>
+          </div>
+          <form action="" id="new-item-form" class="hidden">
+            <div class="form-group">
+              <input
+                type="text"
+                id="title-input"
+                name="item-title"
+                placeholder="Title"
+              />
+            </div>
+            <div class="form-group">
+              <label for="item-due-date">Due Date</label>
+              <input type="date" id="due-date-input" name="item-due-date" />
+            </div>
+            <div class="form-group">
+              <label for="item-priority">Priority</label>
+              <select name="item-priority" id="priority-input">
+                <option value="3" selected>Low</option>
+                <option value="2">Medium</option>
+                <option value="1">High</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="item-complete">Complete</label>
+              <input type="checkbox" id="complete-input" name="item-complete" />
+            </div>
+            <label for="item-notes">Notes</label>
+            <textarea
+              name="item-notes"
+              id="notes-input"
+              cols="30"
+              rows="10"
+              placeholder="Notes"
+            ></textarea>
+            <div class="button-group">
+              <button type="submit" id="item-save" class="button-primary">
+                Save
+              </button>
+              <button id="item-cancel" class="button-delete">Cancel</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
-  <footer>
-    Organize your life with Todoey and never miss another deadline
-  </footer>
-</body>
+    <footer>
+      Organize your life with Todoey and never miss another deadline
+    </footer>
+  </body>
 </html>

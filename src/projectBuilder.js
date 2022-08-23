@@ -5,7 +5,9 @@ export default function projectFactory(title, itemArray) {
   const id = projectCounter;
 
   const getTitle = () => title;
-  const setTitle = (newTitle) => { title = newTitle; };
+  const setTitle = (newTitle) => {
+    title = newTitle;
+  };
   const getItems = () => itemArray;
   const addItem = (item) => {
     itemArray.push(item);
@@ -18,7 +20,9 @@ export default function projectFactory(title, itemArray) {
     }
   };
   const getId = () => id;
-  const setId = (newId) => { id = newId; };
+  const setId = (newId) => {
+    id = newId;
+  };
 
   return {
     id,
