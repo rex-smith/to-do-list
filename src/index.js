@@ -1,13 +1,15 @@
-import projectFactory from './projectBuilder.js';
-import { saveList, retrieveList, createRealProjects } from './storageHandler.js';
-import { showItemDetail, hideItemForm, displaySidebar, toggleItemComplete, showNewProjectLink, showNewProjectForm, showAllProjects, addProjectToSidebar, showOnlyProject, showEditItemForm, showNewItemForm, refreshSidebar, clearItemForm } from './displayController.js';
+import projectFactory from './projectBuilder';
+import { saveList, retrieveList, createRealProjects } from './storageHandler';
+import {
+  showItemDetail, hideItemForm, displaySidebar, toggleItemComplete, showNewProjectLink, showNewProjectForm, showAllProjects, addProjectToSidebar, showOnlyProject, showEditItemForm, showNewItemForm, refreshSidebar, clearItemForm,
+} from './displayController';
 import './style.css';
 import './project.css';
 import './sidebar.css';
 import './itemDetail.css';
 
 // // Toggle to clear memory
-// localStorage.clear();  
+// localStorage.clear();
 
 let projectArray = [];
 projectArray = retrieveList();
@@ -19,18 +21,18 @@ if (projectArray.length === 0) {
 }
 
 function getProjectFromItem(item) {
-  let project = projectArray.find(project => project.getItems().includes(item));
+  const project = projectArray.find((project) => project.getItems().includes(item));
   return project;
 }
 
 function getProjectFromId(projectId) {
-  let project = projectArray.find(project => project.getId() === projectId);
+  const project = projectArray.find((project) => project.getId() === projectId);
   return project;
 }
 
 function getItemFromId(itemId) {
   for (let i = 0; i < projectArray.length; i++) {
-    let item = projectArray[i].getItems().find(item => item.getId() === itemId);
+    const item = projectArray[i].getItems().find((item) => item.getId() === itemId);
     if (item) {
       return item;
     }
@@ -47,7 +49,7 @@ export function addProjectToProjectArray(project) {
 }
 
 function removeProjectFromProjectArray(project) {
-  let index = projectArray.indexOf(project);
+  const index = projectArray.indexOf(project);
   projectArray.splice(index, 1);
 }
 
@@ -75,8 +77,8 @@ function masterHandler(e) {
   }
   // Sidebar title click should activate project for view
   if (e.target.classList.contains('side-project-title')) {
-    let projectId = idFromHTMLId(e.target.id);
-    let project = getProjectFromId(projectId);
+    const projectId = idFromHTMLId(e.target.id);
+    const project = getProjectFromId(projectId);
     showOnlyProject(project);
   }
   // Sidebar New Project Button should create title form for new proejct
@@ -85,34 +87,34 @@ function masterHandler(e) {
   }
   // Item Name should activate item for view
   if (e.target.classList.contains('item-title')) {
-    let id = idFromHTMLId(e.target.parentNode.id);  // Item container is parent
-    let item = getItemFromId(id);
+    const id = idFromHTMLId(e.target.parentNode.id); // Item container is parent
+    const item = getItemFromId(id);
     showItemDetail(item);
   }
   // Clicking complete box on item should toggle complete status
   if (e.target.parentNode.classList.contains('item-complete')) {
-    let itemContainer = e.target.parentNode.parentNode.parentNode;
-    let id = parseInt(idFromHTMLId(itemContainer.id)); // Item container is parent of item extras which is parent
-    let item = getItemFromId(id);
+    const itemContainer = e.target.parentNode.parentNode.parentNode;
+    const id = parseInt(idFromHTMLId(itemContainer.id)); // Item container is parent of item extras which is parent
+    const item = getItemFromId(id);
     toggleItemComplete(item);
   }
 
   // Clicking New Item Button should show new item form for new item in project
   if (e.target.classList.contains('add-item-button')) {
-    let projectId = parseInt(e.target.dataset.projectId)
-    let project = getProjectFromId(projectId);
+    const projectId = parseInt(e.target.dataset.projectId);
+    const project = getProjectFromId(projectId);
     showNewItemForm(project);
   }
   // Clicking Edit on Item Detail
   if (e.target.id === 'item-detail-edit') {
-    let itemId = parseInt(e.target.parentNode.parentNode.dataset.itemId);
-    let item = getItemFromId(itemId);
+    const itemId = parseInt(e.target.parentNode.parentNode.dataset.itemId);
+    const item = getItemFromId(itemId);
     showEditItemForm(item);
   }
   // Clicking Delete on Item Detail
   if (e.target.id === 'item-detail-delete') {
-    let item = getItemFromId(parseInt(e.target.parentNode.parentNode.dataset.itemId));
-    let project = getProjectFromItem(item);
+    const item = getItemFromId(parseInt(e.target.parentNode.parentNode.dataset.itemId));
+    const project = getProjectFromItem(item);
     project.removeItem(item);
     saveList(projectArray);
     showOnlyProject(project);
@@ -127,8 +129,8 @@ function masterHandler(e) {
 
   // Clicking on Delete Project Button
   if (e.target.classList.contains('project-delete')) {
-    let projectId = parseInt(idFromHTMLId(e.target.id));
-    let project = getProjectFromId(projectId);
+    const projectId = parseInt(idFromHTMLId(e.target.id));
+    const project = getProjectFromId(projectId);
     removeProjectFromProjectArray(project);
     refreshSidebar();
     saveList(projectArray);
@@ -140,17 +142,17 @@ function masterHandler(e) {
     if (document.querySelector('.active-sidebar-title').id === 'side-main-title') {
       showAllProjects();
     } else {
-      let project = getProjectFromId(parseInt(document.querySelector('.active-sidebar-title').id));
+      const project = getProjectFromId(parseInt(document.querySelector('.active-sidebar-title').id));
       showOnlyProject(project);
     }
   }
-};
+}
 
 // New Project Form Submit should create new project and activate it
-let newProjectForm = document.getElementById('new-project-form');
+const newProjectForm = document.getElementById('new-project-form');
 newProjectForm.addEventListener('submit', (e) => {
   e.preventDefault();
-  let newProject = projectFactory(newProjectForm.elements['title'].value, []);
+  const newProject = projectFactory(newProjectForm.elements.title.value, []);
   addProjectToProjectArray(newProject);
   addProjectToSidebar(newProject);
   showOnlyProject(newProject);
@@ -160,7 +162,7 @@ newProjectForm.addEventListener('submit', (e) => {
 
 // New Item Form Submit should create new item and add it to project and show project
 
-let itemForm = document.getElementById('new-item-form');
+const itemForm = document.getElementById('new-item-form');
 itemForm.addEventListener('submit', (e) => {
   e.preventDefault();
   // Accept values for all fields
@@ -171,7 +173,7 @@ itemForm.addEventListener('submit', (e) => {
   const newNotes = itemForm.elements['item-notes'].value;
 
   // Get item from dataset value
-  let item = getItemFromId(parseInt(itemForm.dataset.itemId));
+  const item = getItemFromId(parseInt(itemForm.dataset.itemId));
 
   // Build item from fields
   item.setTitle(newTitle);
@@ -183,7 +185,7 @@ itemForm.addEventListener('submit', (e) => {
 
   // Show the full project, which will have the new one included
   showOnlyProject(getProjectFromItem(item));
-  
+
   // Make it the active item to show detail
   itemForm.reset();
   showItemDetail(item);
@@ -192,7 +194,3 @@ itemForm.addEventListener('submit', (e) => {
 // Show all projects
 
 initializePage();
-
-
-
-
